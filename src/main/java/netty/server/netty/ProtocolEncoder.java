@@ -33,6 +33,7 @@ public class ProtocolEncoder extends MessageToByteEncoder {
                     int length= encode(headMap,out);
                     fullLength +=length;
                     headLength += length;
+                    //123333
                 }
 
 
