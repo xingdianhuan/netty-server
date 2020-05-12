@@ -18,7 +18,7 @@ public class RpcKyroFactory implements KryoFactory {
     }
 
     public KryoSerializer get(){
-        return new Kryo;
+        return new KryoSerializer(pool.borrow());
     }
     @Override
     public Kryo create() {
