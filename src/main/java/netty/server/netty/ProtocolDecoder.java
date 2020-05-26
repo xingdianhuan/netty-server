@@ -9,7 +9,10 @@ import netty.server.common.ProtocolConstants;
 import netty.server.context.RpcMessage;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 /*
         * <pre>
@@ -74,10 +77,33 @@ public class ProtocolDecoder extends LengthFieldBasedFrameDecoder {
         rpcMessage.setId(requestId);
         rpcMessage.setCompressor(compressor);
         rpcMessage.setMessageType(messageType);
+        int headMapLength = headLength-ProtocolConstants.V1_HEAD_LENGTH;
+         if (headLength>0){
+             Map<String,String> headMap = decodeHead(headLength,frame);
+             rpcMessage.setHeadMap(headMap);
+         }
 
 
 
 
+
+    }
+    private Map<String,String> decodeHead(int len,ByteBuf frame){
+        Map<String,String> map = new HashMap<>();
+         while (len>=0){
+             short value = frame.readShort();
+             byte[] bytes = new byte[value];
+             frame.readBytes(bytes);
+             String key = new String(bytes, Charset.forName("UTF-8"));
+             len =len-value;
+             value = frame.readShort();
+             byte[] bytes1 = new byte[value];
+             frame.readBytes(bytes1);
+             String value1 = new String(bytes1, Charset.forName("UTF-8"));
+             map.put(key,value1);
+             len =len-value;
+         }
+         return map;
 
     }
 
