@@ -6,9 +6,12 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import netty.server.common.ProtocolConstants;
+import netty.server.common.RpcKyroFactory;
+import netty.server.context.HeartbeatMessage;
 import netty.server.context.RpcMessage;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +62,7 @@ public class ProtocolDecoder extends LengthFieldBasedFrameDecoder {
         return null;
     }
 
-    public Object decodeFrame(ByteBuf frame){
+    public Object decodeFrame(ByteBuf frame) throws IOException {
          byte b0 =frame.readByte();
          byte b1 = frame.readByte();
          if (ProtocolConstants.MAGIC_CODE_BYTES[0]!=b0 || ProtocolConstants.MAGIC_CODE_BYTES[1]!=b1){
@@ -82,10 +85,20 @@ public class ProtocolDecoder extends LengthFieldBasedFrameDecoder {
              Map<String,String> headMap = decodeHead(headLength,frame);
              rpcMessage.setHeadMap(headMap);
          }
+       if (messageType==ProtocolConstants.MSGTYPE_HEARTBEAT_REQUEST){
+           rpcMessage.setBody(HeartbeatMessage.PING);
+       }else if (messageType==ProtocolConstants.MSGTYPE_HEARTBEAT_REQUEST){
+           rpcMessage.setBody(HeartbeatMessage.PONG);
+       }else{
+            if (fullLength-headLength>0){
+                byte[] bs = new byte[fullLength-headLength];
+                frame.readBytes(bs);
+                rpcMessage.setBody(RpcKyroFactory.getInstance().get().deserialize(bs));
+            }
 
+       }
 
-
-
+        return rpcMessage;
 
     }
     private Map<String,String> decodeHead(int len,ByteBuf frame){
