@@ -15,10 +15,10 @@
  */
 package netty.server.common;
 
-import io.seata.config.ConfigurationFactory;
+/*import io.seata.config.ConfigurationFactory;
 import io.seata.core.compressor.CompressorType;
 import io.seata.core.constants.ConfigurationKeys;
-import io.seata.core.serializer.SerializerType;
+import io.seata.core.serializer.SerializerType;*/
 
 /**
  * @author Geng Zhang

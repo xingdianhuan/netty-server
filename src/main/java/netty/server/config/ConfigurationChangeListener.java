@@ -1,5 +1,7 @@
 package netty.server.config;
 
+import netty.server.common.NamedThreadFactory;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -11,6 +13,7 @@ public interface ConfigurationChangeListener {
     int MAX_LISTENER_THREAD = 1;
 
     ExecutorService EXECUTOR_SERVICE = new ThreadPoolExecutor(CORE_LISTENER_THREAD,MAX_LISTENER_THREAD,Integer.MAX_VALUE,
-            TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>(),new NamedTh);
+            TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>(),new NamedThreadFactory("configListenerOperate",MAX_LISTENER_THREAD));
+
 
 }

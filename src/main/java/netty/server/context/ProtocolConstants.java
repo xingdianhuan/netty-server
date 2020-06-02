@@ -46,19 +46,19 @@ public class ProtocolConstants {
     // public static final byte MSGTYPE_NEGOTIATOR_REQUEST = 5;
     // public static final byte MSGTYPE_NEGOTIATOR_RESPONSE = 6;
 
-    /**
+ /*   *//**
      * Configured codec by user, default is SEATA
      *
      * @see CodecType#SEATA
-     */
+     *//*
     public static final byte CONFIGURED_CODEC = CodecType.getByName(ConfigurationFactory.getInstance()
             .getConfig(ConfigurationKeys.SERIALIZE_FOR_RPC, CodecType.SEATA.name())).getCode();
 
-    /**
+    *//**
      * Configured compressor by user, default is NONE
      *
      * @see CompressorType#NONE
-     */
+     *//*
     public static final byte CONFIGURED_COMPRESSOR = CompressorType.getByName(ConfigurationFactory.getInstance()
-            .getConfig(ConfigurationKeys.COMPRESSOR_FOR_RPC, CompressorType.NONE.name())).getCode();
+            .getConfig(ConfigurationKeys.COMPRESSOR_FOR_RPC, CompressorType.NONE.name())).getCode();*/
 }

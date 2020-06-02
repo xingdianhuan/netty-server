@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RpcServerBootstrap implements RemotingServer {
     private static final Logger logger = LoggerFactory.getLogger(RpcServerBootstrap.class);
     private final ServerBootstrap serverBootstrap = new ServerBootstrap();
-    private final EventLoopGroup eventLoopWorker;
-    private final EventLoopGroup eventLoopBoss;
+ /*   private final EventLoopGroup eventLoopWorker;
+    private final EventLoopGroup eventLoopBoss;*/
     private ChannelHandler[] channelHandlers;
     private int listenerPort;
     private AtomicBoolean initialized = new AtomicBoolean(false);

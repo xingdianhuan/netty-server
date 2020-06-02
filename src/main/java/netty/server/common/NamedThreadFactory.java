@@ -12,6 +12,10 @@ public class NamedThreadFactory implements ThreadFactory {
     private final int totalSize;
     private final Boolean makeDaemons;
 
+    public NamedThreadFactory(String prefix, int totalSize) {
+        this(prefix, totalSize, true);
+    }
+
     public NamedThreadFactory(String prefix, int totalSize, Boolean makeDaemons) {
         PREFIX_COUNTER.putIfAbsent(prefix,new AtomicInteger(0));
         int prefixCounter = PREFIX_COUNTER.get(prefix).incrementAndGet();
@@ -22,6 +26,16 @@ public class NamedThreadFactory implements ThreadFactory {
 
     @Override
     public Thread newThread(Runnable r) {
-        return null;
+        String name = prefix;
+        if (totalSize>1) {
+            name += "_" + totalSize;
+        }
+            Thread thread = new Thread(r,name);
+            thread.setDaemon(makeDaemons);
+            if (thread.getPriority()!=Thread.NORM_PRIORITY){
+                thread.setPriority(Thread.NORM_PRIORITY);
+            }
+
+        return thread;
     }
 }
