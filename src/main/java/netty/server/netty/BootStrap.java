@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.net.InetSocketAddress;
 
 @Service
-public class BootStrap implements InitializingBean {
+public class BootStrap implements RemotingServer {
 
     private final Integer SERVER_NUMBER = 1;
 
@@ -26,11 +26,14 @@ public class BootStrap implements InitializingBean {
 
     private EventLoopGroup clientGroup;
 
+    private Channel channel;
+
     @Autowired
     private SimpleChannelHandler simpleChannelHandler;
 
+
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void start() throws InterruptedException {
         clientGroup = new NioEventLoopGroup(CLIENT_NUMBER);
         serverGroup = new NioEventLoopGroup(SERVER_NUMBER);
         serverBootstrap = new ServerBootstrap();
@@ -45,10 +48,16 @@ public class BootStrap implements InitializingBean {
             protected void initChannel(SocketChannel socketChannel) throws Exception {
                 socketChannel.pipeline().addLast(new ProtocolDecoder())
                         .addLast(new IdleStateHandler(10,0,0))
+                        .addLast(new IdleStateTriggerHandler())
                         .addLast(new ProtocolEncoder())
                         .addLast(simpleChannelHandler);
             }
         });
-        ChannelFuture channelFuture = serverBootstrap.bind(8081).sync();
+        channel = serverBootstrap.bind().sync().channel();
+    }
+
+    @Override
+    public void shutdown() {
+
     }
 }

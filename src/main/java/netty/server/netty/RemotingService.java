@@ -24,7 +24,7 @@ public interface RemotingService {
     /**
      * Start.
      */
-    void start();
+    void start() throws InterruptedException;
 
     /**
      * Shutdown.
